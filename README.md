@@ -42,10 +42,11 @@ validator = L402Validator(
 
 @app.post("/api/premium/endpoint", status_code=201)
 async def premium_endpoint(background_tasks: BackgroundTasks, request: Request):
-    validator(request)
+    await validator(request)
     # Your route handler logic here
     pass
 ```
+
 With this setup, all requests to the "/api/premium/endpoint" route of your FastAPI application will be intercepted by the L402Validator middleware. If the request doesn't contain a valid LSAT in the Authorization header, the middleware will return a 402 Payment Required response with a Lightning invoice and a macaroon in the www-authenticate header.
 
 The client can then pay the Lightning invoice, and resend the request with the Authorization header containing the macaroon and the preimage of the paid invoice.
